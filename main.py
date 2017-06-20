@@ -20,18 +20,17 @@ class Blog(db.Model):
 
 
 
-@app.route('/blog', methods=['POST', 'GET'])
-def index():
+@app.route('/blog', methods=['POST','GET'])
+def blog():
+    id = request.args.get('id')
 
+    if id:
+        post = Blog.query.filter_by(id=id).first()
+        return render_template('indblogview.html',post=post)
+   
     posts = Blog.query.all()
     return render_template('mainblog.html',posts=posts)
-
-
-@app.route('/', methods=['POST','GET'])
-def single_blog():
-    id = request.args.get('id')
-    post = Blog.query.filter_by(id=id).first()
-    return render_template('indblogview.html',post=post)
+ 
 
 
 
@@ -62,7 +61,7 @@ def add_post():
         db.session.commit()
 
     
-        return redirect('/blog')
+        return redirect('/blog?id={0}'.format(new_entry.id))
 
     return render_template('newpost.html')
 
