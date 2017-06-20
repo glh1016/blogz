@@ -12,10 +12,10 @@
 
         <ul>
             {% for post in posts %}
-            <li>{{post.title}}</li>
+            <a href='/?id={{post.id}}'>{{post.title}}</a>
             <li>{{post.body}}</li>
             {% endfor %}
-        </ul>
+        </ul
 
     {% endif %}
 {% endblock %}

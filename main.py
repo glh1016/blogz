@@ -27,6 +27,13 @@ def index():
     return render_template('mainblog.html',posts=posts)
 
 
+@app.route('/', methods=['POST','GET'])
+def single_blog():
+    id = request.args.get('id')
+    post = Blog.query.filter_by(id=id).first()
+    return render_template('indblogview.html',post=post)
+
+
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def add_post():
