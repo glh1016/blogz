@@ -50,7 +50,7 @@ def add_post():
     
 
 
-        new_entry = Blog(blog_title,blog_body)
+        new_entry = Blog(title,body)
         db.session.add(new_entry)
         db.session.commit()
 
@@ -58,9 +58,6 @@ def add_post():
         return redirect('/blog')
 
     return render_template('newpost.html')
-
-
-
 
 
 
