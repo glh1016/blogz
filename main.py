@@ -19,6 +19,7 @@ class Blog(db.Model):
         self.body = body
 
 
+
 @app.route('/blog', methods=['POST', 'GET'])
 def index():
 
@@ -31,13 +32,32 @@ def index():
 def add_post():
 
     if request.method == 'POST':
-        blog_title = request.form['title']
-        blog_body = request.form['body']
+        title = request.form['title']
+        body = request.form['body']
+
+        title_error = ''
+        body_error = ''
+        
+        if not title:
+            title_error = "Empty title field"
+    
+
+        if not body:
+            body_error = "Empty body field"
+
+        if not body or not title:
+            return render_template('newpost.html', title = title, body = body, title_error = title_error, body_error = body_error)
+    
+
+
         new_entry = Blog(blog_title,blog_body)
         db.session.add(new_entry)
         db.session.commit()
-     
-    return redirect('/blog')
+
+    
+        return redirect('/blog')
+
+    return render_template('newpost.html')
 
 
 

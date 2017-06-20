@@ -6,12 +6,14 @@
     <form method='post'>
         <label>
             Title for your new blog:
-            <input type="text" name='title' />
+            <input type="text" name='title' value='{{title}}' />
+            <span class="error">{{title_error}}</span>
         </label>
 
         <label>
             Your new blog:
-            <input type="text" name='body'/>
+            <input type="text" name='body'value='{{body}}'/>
+            <span class="error">{{body_error}}</span>
         </label>
 
         <input type="submit" value='Add new entry'/>
