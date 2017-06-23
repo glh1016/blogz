@@ -6,9 +6,7 @@
 
  <hr />
 
-    {% if users|length == 0 %}
-    <p>No blog entries yet</p>
-    {% else %}
+   
 
         <ul>
             {% for post in user.blogs %}
@@ -17,5 +15,5 @@
             {% endfor %}
         </ul
 
-    {% endif %}
+    
 {% endblock %}

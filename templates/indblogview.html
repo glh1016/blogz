@@ -4,6 +4,10 @@
 <ul>
 <li>{{post.title}}</li>
 <li>{{post.body}}</li>
+<li>written by</li>
+            <a href='/blog?user={{post.owner.id}}'>{{post.owner.username}}</a>
+
+
 </ul>
 
 {% endblock %}

@@ -43,7 +43,7 @@ def blog():
         post = Blog.query.filter_by(id=id).first()
         return render_template('indblogview.html',post=post)
     if username:
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(id=username).first()
         return render_template('singleuser.html',user=user)
 
    
