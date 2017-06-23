@@ -53,8 +53,8 @@ def add_post():
 
     if request.method == 'POST':
         title = request.form['title']
-        owner = request.form['username']
         body = request.form['body']
+        owner= User.query.filter_by(username=session['username']).first()
 
         title_error = ''
         body_error = ''
@@ -71,7 +71,7 @@ def add_post():
     
 
 
-        new_entry = Blog(title,body)
+        new_entry = Blog(title,body,owner)
         db.session.add(new_entry)
         db.session.commit()
 
