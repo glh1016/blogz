@@ -101,9 +101,14 @@ def login():
         if user and user.password == password:
             session['username'] = username
             flash("Logged in")
-            return redirect('/')
-        else: 
-            flash('User password incorrect, or username does not exist', 'error')
+            return redirect('/newpost')
+        
+        if user and user.password != password:
+            #TODO keep username populated
+            flash('User password incorrect', 'error')
+
+        if not user:
+            flash('Username does not exist', 'error')
 
     return render_template('login.html')
 
@@ -124,18 +129,42 @@ def signup():
         password = request.form['password']
         verify = request.form['verify']
 
-        # TODO - validate user's data
 
         existing_user = User.query.filter_by(username=username).first()
         if not existing_user:
+        
+            if not username:
+                flash('Username field empty', 'error')
+                return render_template('signup.html')
+
+            if not password:
+                flash('Password field empty', 'error')
+                return render_template('signup.html')
+
+            if not verify:
+                flash('Must verify password', 'error')
+                return render_template('signup.html')
+
+            if password != verify:
+                flash('Passwords must match','error')
+                return render_template('signup.html')
+
+            if len(username) < 3 or len(password) < 3:
+                flash('Username and password must each be 3 characters or more','error')
+                return render_template('signup.html')
+
             new_user = User(username, password)
             db.session.add(new_user)
             db.session.commit()
             session['username'] = username
-            return redirect('/')
-        else:
-            # TODO - user better response messaging
-            return "<h1>Duplicate user</h1>"
+            return redirect('/newpost')
+             
+        
+        else: 
+            flash('Existing user', 'error')
+            return redirect('/login')
+
+    
 
     return render_template('signup.html')
 
