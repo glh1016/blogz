@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -6,6 +6,7 @@ app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:blogs@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
+app.secret_key = 'y337kGcys&zP3B'
 
 
 class Blog(db.Model):
@@ -68,6 +69,7 @@ def add_post():
 
     if request.method == 'POST':
         title = request.form['title']
+        owner = request.form['username']
         body = request.form['body']
 
         title_error = ''
@@ -95,18 +97,67 @@ def add_post():
     return render_template('newpost.html')
 
 
-#@app.route('/newpost', methods=['POST', 'GET'])
-#def signup():
+@app.route('/login', methods=['POST', 'GET'])
+def login():
 
-#@app.route('/newpost', methods=['POST', 'GET'])
-#def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and user.password == password:
+            #session['username'] = username
+            #flash("Logged in")
+            return redirect('/')
+        else:
+            pass
+            #return '<h1> error </h1>' 
+            #flash('User password incorrect, or user does not exist', 'error')
+
+    return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    del session['username']
+    return redirect('/')
+
+
+
+@app.route('/signup', methods=['POST', 'GET'])
+def signup(): 
+
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        verify = request.form['verify']
+
+        # TODO - validate user's data
+
+        existing_user = User.query.filter_by(username=username).first()
+        if not existing_user:
+            new_user = User(username, password)
+            db.session.add(new_user)
+            db.session.commit()
+            session['username'] = username
+            return redirect('/')
+        else:
+            # TODO - user better response messaging
+            return "<h1>Duplicate user</h1>"
+
+    return render_template('signup.html')
+    
+
+
+
+
+
+if __name__ == '__main__':
+    app.run()
+
+
 
 #@app.route('/newpost', methods=['POST', 'GET'])
 #def index():
 
 #logout
 
-
-
-if __name__ == '__main__':
-    app.run()
