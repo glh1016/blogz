@@ -37,10 +37,15 @@ class User(db.Model):
 @app.route('/blog', methods=['POST','GET'])
 def blog():
     id = request.args.get('id')
+    username = request.args.get('user')
 
     if id:
         post = Blog.query.filter_by(id=id).first()
         return render_template('indblogview.html',post=post)
+    if username:
+        user = User.query.filter_by(username=username).first()
+        return render_template('singleuser.html',user=user)
+
    
     posts = Blog.query.all()
     return render_template('mainblog.html',posts=posts)
@@ -170,12 +175,6 @@ def signup():
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    id = request.args.get('id')
-
-    if id:
-        user = User.query.filter_by(id=id).first()
-        return render_template('index.html',user=user)
-   
     users= User.query.all()
     return render_template('index.html',users=users)
     
